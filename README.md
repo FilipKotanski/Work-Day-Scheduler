@@ -1,6 +1,6 @@
 # Day Scheduler Application
 
-A simple calendar application that allows users to save events for each hour of the day. This application runs in the browser and features dynamically updated HTML and CSS powered by jQuery. It uses the Day.js library for working with date and time.
+A simple calendar application that allows users to save and delete events for each hour of the day. This application runs in the browser and features dynamically updated HTML and CSS powered by jQuery. It uses the Day.js library for working with date and time.
 
 ## Table of Contents
 - [User Story](#user-story)
