@@ -1,3 +1,49 @@
+$(document).ready(function() {
+
+// Function to create the main day scheduler with time blocks
+
+function createDayScheduler(startTime, endTime){
+
+    let currentRow;
+ 
+    let daySchedulerArea = $("#dayScheduler");
+ 
+     // Set and display the current date
+ 
+     setCurrentDate();
+ 
+     // Loop to create time blocks for each hour
+ 
+     for(let hour = startTime; hour < endTime + 1; hour++){
+ 
+         // Create a row for the current hour
+ 
+         currentRow = createRow(hour);
+ 
+         // Update styling based on past, present, or future
+ 
+         updateEventsColumnStyling(currentRow, hour);
+ 
+         // Append the row to the day scheduler
+ 
+         daySchedulerArea.append(currentRow);
+ 
+     }
+ 
+     // Load saved events from localStorage and display
+ 
+     loadAndDisplaySavedEvents(startTime, endTime);
+ 
+ }
+
+// Function to set and display the current date
+ 
+function setCurrentDate(){
+
+    $("#currentDay").text(dayjs().format("dddd, D MMMM YYYY"));
+
+}
+
 // Function to create a row for a specific hour
 
 function createRow(hour){
@@ -66,3 +112,70 @@ function hourToString(hour) {
 //     return hour;
 
 // }
+
+// Function to update styling of time blocks based on current time
+
+function updateEventsColumnStyling(currentRow, hour){
+
+    let currentHour = getCurrentHour();
+
+    let textArea = currentRow.children().eq(1);
+
+    // Apply different classes based on the relationship to the current time
+
+    if (hour < currentHour) {
+
+        textArea.addClass("past");
+
+    } 
+    
+    else if (hour === currentHour){
+
+        textArea.addClass("present");
+
+    }
+     
+    else {
+
+        textArea.addClass("future");
+
+    }
+   
+}
+
+// Function to get the current hour using dayjs library
+
+function getCurrentHour(){
+
+    return dayjs().hour();
+ 
+ }
+
+// Function to load saved events from localStorage and display them
+
+function loadAndDisplaySavedEvents(startTime, endTime){
+
+    for(let hour = startTime; hour < endTime + 1; hour++)
+    {
+
+        let eventsColumn = $("textarea").eq(hour-startTime);
+
+        eventsColumn.attr('hour', hour);
+
+        let savedEvent = localStorage.getItem("" + hour);
+
+        if(savedEvent){
+
+            eventsColumn.val(savedEvent);
+
+        }
+
+    }
+
+}
+
+// Initialization: Create the day scheduler from 9 AM to 5 PM
+
+createDayScheduler(9,17);
+
+});
