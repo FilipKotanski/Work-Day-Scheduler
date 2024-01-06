@@ -178,4 +178,86 @@ function loadAndDisplaySavedEvents(startTime, endTime){
 
 createDayScheduler(9,17);
 
+// Event listener for saving events
+
+$(".container").on("click", ".saveBtn", function() {
+
+    let eventsColumn = $(this).prev();
+    
+    let eventHour = eventsColumn.attr('hour');
+
+    let eventText = eventsColumn.val().trim();
+
+    if(eventText && (eventText == localStorage.getItem(eventHour))){
+
+        displayMessage(`Event ${eventText} has already been saved!`,"alert-info");
+
+    }
+
+    else if(eventText){
+
+        localStorage.setItem(eventHour, eventText);
+
+        displayMessage(`Event ${eventText} saved to the scheduler!`,"alert-success");
+        
+    }
+
+    else if(!eventText){
+
+        displayMessage("Please provide event description!","alert-info")
+
+    }
+
+});
+
+// Event listener for deleting events
+
+$(".container").on("click", ".deleteBtn", function() {
+
+    let eventsColumn = $(this).siblings().eq(-2);
+
+    let hour = eventsColumn.attr('hour');
+
+    let savedEvent = localStorage.getItem("" + hour);
+
+    if(savedEvent){
+
+        localStorage.removeItem(hour);
+
+        eventsColumn.val("");
+
+        displayMessage(`Event ${savedEvent} removed from the scheduler!`,"alert-success")
+
+    }
+
+    else{
+
+        displayMessage(`There is no event planned for ${hour}!`,"alert-warning");
+
+    }
+
+});
+
+// Function to display a message on the scheduler
+
+function displayMessage(message,alertClass) {
+
+    // Create a message element
+
+    let messageElement = $("<div>").addClass("alert " + alertClass + " text-center").text(message);
+
+    // Append it to the top of the scheduler
+
+    $(".container").prepend(messageElement);
+
+    // Remove the message after 5 seconds
+
+    setTimeout(function () {
+
+        messageElement.remove();
+
+    }, 5000);
+
+}
+
 });
